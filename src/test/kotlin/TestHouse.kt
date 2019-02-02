@@ -14,8 +14,9 @@ class TestHouse {
         val endDateTime = startDateTime + Date(oneHourInMilliseconds)
 
         val hourlyPowerGenerationRate = 2.0
-        val fakeSolarPanel = FakeSolarPanel(startDateTime, powerGenerationRate)
+        val fakeSolarPanel = FakeSolarPanel(startDateTime, hourlyPowerGenerationRate)
         val house = House(fakeSolarPanel)
+
         val powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
         assertEquals(powerGenerated, hourlyPowerGenerationRate)
     }
@@ -25,9 +26,28 @@ class TestHouse {
         val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
         val endDateTime = startDateTime + Date(oneHourInMilliseconds)
 
-        val fakeSolarPanel = SolarPanel(startDateTime)
-        val house = House(fakeSolarPanel)
+        val solarPanel = SolarPanel(startDateTime)
+        val house = House(solarPanel)
+
         val powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
         assertEquals(powerGenerated, 999.9)
+    }
+
+    @Test fun SwitchingFromRealSolarPanelToFakeSolarPanel() {
+        val startDateTime = Date(0L)
+        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
+        val endDateTime = startDateTime + Date(oneHourInMilliseconds)
+
+        val hourlyPowerGenerationRate = 2.0
+        val fakeSolarPanel = FakeSolarPanel(startDateTime, hourlyPowerGenerationRate)
+        val solarPanel = SolarPanel(startDateTime)
+        val house = House(solarPanel)
+
+        var powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
+        assertEquals(powerGenerated, 999.9)
+
+        house.setPowerGenerator(fakeSolarPanel)
+        powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
+        assertEquals(powerGenerated, hourlyPowerGenerationRate)
     }
 }
