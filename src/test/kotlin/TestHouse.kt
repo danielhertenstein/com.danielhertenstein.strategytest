@@ -8,10 +8,10 @@ class TestHouse {
     private val SECONDS_IN_AN_HOUR: Long = 60L
     private val MILLISECONDS_IN_A_SECOND: Long = 1000L
 
-    @Test fun HouseWithFakeSolarPanelReadsFromFile() {
+    @Test fun houseWithFakeSolarPanelReadsFromFile() {
         val startDateTime = Date(0L)
         val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
-        val endDateTime = startDateTime + Date(oneHourInMilliseconds)
+        val endDateTime = Date(oneHourInMilliseconds)
 
         val hourlyPowerGenerationRate = 2.0
         val fakeSolarPanel = FakeSolarPanel(startDateTime, hourlyPowerGenerationRate)
@@ -21,10 +21,10 @@ class TestHouse {
         assertEquals(powerGenerated, hourlyPowerGenerationRate)
     }
 
-    @Test fun HouseWithRealSolarPanelReadsFromSensor() {
+    @Test fun houseWithRealSolarPanelReadsFromSensor() {
         val startDateTime = Date(0L)
         val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
-        val endDateTime = startDateTime + Date(oneHourInMilliseconds)
+        val endDateTime = Date(oneHourInMilliseconds)
 
         val solarPanel = SolarPanel(startDateTime)
         val house = House(solarPanel)
@@ -33,10 +33,10 @@ class TestHouse {
         assertEquals(powerGenerated, 999.9)
     }
 
-    @Test fun SwitchingFromRealSolarPanelToFakeSolarPanel() {
+    @Test fun switchingFromRealSolarPanelToFakeSolarPanel() {
         val startDateTime = Date(0L)
         val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
-        val endDateTime = startDateTime + Date(oneHourInMilliseconds)
+        val endDateTime = Date(oneHourInMilliseconds)
 
         val hourlyPowerGenerationRate = 2.0
         val fakeSolarPanel = FakeSolarPanel(startDateTime, hourlyPowerGenerationRate)
