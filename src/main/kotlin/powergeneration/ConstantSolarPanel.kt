@@ -2,7 +2,7 @@ package powergeneration
 
 import java.util.*
 
-class FakeSolarPanel(
+class ConstantSolarPanel(
     override val previousDateTime: Date,
     val hourlyPowerGenerationRate: Double
 ) : PowerGenerator {
