@@ -1,9 +1,13 @@
 import powergeneration.PowerGenerator
 import java.util.*
 
-class House(val powerGenerator: PowerGenerator) {
-    fun setPowerGenerator(powerGenerator: PowerGenerator) {}
+class House(private var powerGenerator: PowerGenerator) {
+
+    fun setPowerGenerator(powerGenerator: PowerGenerator) {
+        this.powerGenerator = powerGenerator
+    }
+
     fun getPowerGeneratedForDateTime(datetime: Date): Double {
-        return 0.0
+        return powerGenerator.powerGeneratedForDateTime(datetime)
     }
 }
