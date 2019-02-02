@@ -3,6 +3,6 @@ package powergeneration
 import java.util.*
 
 interface PowerGenerator {
-    val previousDateTime: Date
+    var previousDateTime: Date
     fun powerGeneratedForDateTime(currentDateTime: Date): Double
 }

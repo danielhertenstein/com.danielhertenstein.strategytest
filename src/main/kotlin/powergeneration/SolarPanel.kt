@@ -2,7 +2,7 @@ package powergeneration
 
 import java.util.*
 
-class SolarPanel(override val previousDateTime: Date) : PowerGenerator{
+class SolarPanel(override var previousDateTime: Date) : PowerGenerator{
     override fun powerGeneratedForDateTime(currentDateTime: Date): Double {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

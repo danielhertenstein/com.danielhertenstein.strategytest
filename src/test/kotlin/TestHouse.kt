@@ -5,12 +5,13 @@ import powergeneration.SolarPanel
 import java.util.*
 
 class TestHouse {
-    private val SECONDS_IN_AN_HOUR: Long = 60L
     private val MILLISECONDS_IN_A_SECOND: Long = 1000L
+    private val SECONDS_IN_A_MINUTE: Long = 60L
+    private val MINUTES_IN_AN_HOUR: Long = 60L
 
     @Test fun houseWithConstantSolarPanelReturnsItsConstant() {
         val startDateTime = Date(0L)
-        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
+        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
         val endDateTime = Date(oneHourInMilliseconds)
 
         val hourlyPowerGenerationRate = 2.0
@@ -23,7 +24,7 @@ class TestHouse {
 
     @Test fun houseWithRealSolarPanelReadsFromSensor() {
         val startDateTime = Date(0L)
-        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
+        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
         val endDateTime = Date(oneHourInMilliseconds)
 
         val solarPanel = SolarPanel(startDateTime)
@@ -35,7 +36,7 @@ class TestHouse {
 
     @Test fun switchingFromRealSolarPanelToConstantSolarPanel() {
         val startDateTime = Date(0L)
-        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_AN_HOUR
+        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
         val endDateTime = Date(oneHourInMilliseconds)
 
         val hourlyPowerGenerationRate = 2.0
