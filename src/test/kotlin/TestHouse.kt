@@ -3,7 +3,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import powergeneration.ConstantSolarPanel
 import powergeneration.SolarPanel
-import powergeneration.TimeSeriesInterpolatingSolarPanel
+import powergeneration.TimeSeriesIntegratingSolarPanel
 import java.io.File
 import java.io.FileWriter
 import java.time.LocalDateTime
@@ -59,7 +59,7 @@ class TestHouse {
         fileWriter.flush()
         fileWriter.close()
 
-        val timeSeriesSolarPanel = TimeSeriesInterpolatingSolarPanel(startDateTime, "testTimeSeries.csv")
+        val timeSeriesSolarPanel = TimeSeriesIntegratingSolarPanel(startDateTime, "testTimeSeries.csv")
 
         val testFile = File("testTimeSeries.csv")
         testFile.delete()

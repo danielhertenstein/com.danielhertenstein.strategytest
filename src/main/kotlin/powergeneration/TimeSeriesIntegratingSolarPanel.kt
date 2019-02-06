@@ -7,7 +7,7 @@ import java.io.BufferedReader
 import java.io.FileReader
 import java.time.LocalDateTime
 
-class TimeSeriesInterpolatingSolarPanel (
+class TimeSeriesIntegratingSolarPanel (
     previousDateTime: LocalDateTime,
     timeSeriesFilePath: String
 ) : BasePowerGenerator(previousDateTime), PowerGenerator {
