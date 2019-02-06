@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test
 import powergeneration.ConstantSolarPanel
 import powergeneration.SolarPanel
 import powergeneration.TimeSeriesIntegratingSolarPanel
-import java.io.File
-import java.io.FileWriter
 import java.time.LocalDateTime
 
 class TestHouse {
@@ -50,20 +48,8 @@ class TestHouse {
     }
 
     @Test fun timeSeriesSolarPanelReadsFromFile() {
-        val fileWriter = FileWriter("testTimeSeries.csv")
-        fileWriter.append("hour,rate\n")
-        for (hour in 0..23) {
-            val rate = hour / 2.0
-            fileWriter.append("$hour,$rate\n")
-        }
-        fileWriter.flush()
-        fileWriter.close()
-
-        val timeSeriesSolarPanel = TimeSeriesIntegratingSolarPanel(startDateTime, "testTimeSeries.csv")
-
-        val testFile = File("testTimeSeries.csv")
-        testFile.delete()
-
+        val timeSeriesFile = javaClass.getResource("testTimeSeries.csv").path
+        val timeSeriesSolarPanel = TimeSeriesIntegratingSolarPanel(startDateTime, timeSeriesFile)
         val house = House(timeSeriesSolarPanel)
 
         endDateTime = startDateTime.plusHours(3L)

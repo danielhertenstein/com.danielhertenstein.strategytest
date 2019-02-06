@@ -15,10 +15,18 @@ class TimeSeriesIntegratingSolarPanel (
     private var powerGenerationFunction: UnivariateFunction
 
     init {
-        val fileReader = BufferedReader(FileReader(timeSeriesFilePath))
-        fileReader.readLine()
+        val (hours, rates) = getHoursAndRatesFromFile(timeSeriesFilePath)
+        val interpolator = SplineInterpolator()
+        powerGenerationFunction = interpolator.interpolate(hours, rates)
+    }
+
+    private fun getHoursAndRatesFromFile(timeSeriesFilePath: String): Pair<DoubleArray, DoubleArray> {
         val hoursList = mutableListOf<Double>()
         val rateList = mutableListOf<Double>()
+
+        val fileReader = BufferedReader(FileReader(timeSeriesFilePath))
+        fileReader.readLine()
+
         var line = fileReader.readLine()
         while (line != null) {
             val tokens = line.split(',')
@@ -28,8 +36,9 @@ class TimeSeriesIntegratingSolarPanel (
             }
             line = fileReader.readLine()
         }
-        val interpolator = SplineInterpolator()
-        powerGenerationFunction = interpolator.interpolate(hoursList.toDoubleArray(), rateList.toDoubleArray())
+        fileReader.close()
+
+        return Pair(hoursList.toDoubleArray(), rateList.toDoubleArray())
     }
 
     override fun powerGeneratedForDateTime(currentDateTime: LocalDateTime): Double {
