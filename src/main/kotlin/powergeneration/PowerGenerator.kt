@@ -1,7 +1,7 @@
 package powergeneration
 
-import java.util.*
+import java.time.LocalDateTime
 
 interface PowerGenerator {
-    fun powerGeneratedForDateTime(currentDateTime: Date): Double
+    fun powerGeneratedForDateTime(currentDateTime: LocalDateTime): Double
 }

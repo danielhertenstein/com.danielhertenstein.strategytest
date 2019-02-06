@@ -1,19 +1,24 @@
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import powergeneration.ConstantSolarPanel
 import powergeneration.SolarPanel
-import java.util.*
+import powergeneration.TimeSeriesInterpolatingSolarPanel
+import java.io.File
+import java.io.FileWriter
+import java.time.LocalDateTime
 
 class TestHouse {
-    private val MILLISECONDS_IN_A_SECOND: Long = 1000L
-    private val SECONDS_IN_A_MINUTE: Long = 60L
-    private val MINUTES_IN_AN_HOUR: Long = 60L
+
+    private lateinit var startDateTime: LocalDateTime
+    private lateinit var endDateTime: LocalDateTime
+
+    @BeforeEach fun beforeEach() {
+        startDateTime = LocalDateTime.of(2019, 2, 6, 0, 0)
+        endDateTime = startDateTime.plusHours(1L)
+    }
 
     @Test fun houseWithConstantSolarPanelReturnsItsConstant() {
-        val startDateTime = Date(0L)
-        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
-        val endDateTime = Date(oneHourInMilliseconds)
-
         val hourlyPowerGenerationRate = 2.0
         val constantSolarPanel = ConstantSolarPanel(startDateTime, hourlyPowerGenerationRate)
         val house = House(constantSolarPanel)
@@ -23,10 +28,6 @@ class TestHouse {
     }
 
     @Test fun houseWithRealSolarPanelReadsFromSensor() {
-        val startDateTime = Date(0L)
-        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
-        val endDateTime = Date(oneHourInMilliseconds)
-
         val solarPanel = SolarPanel(startDateTime)
         val house = House(solarPanel)
 
@@ -35,10 +36,6 @@ class TestHouse {
     }
 
     @Test fun switchingFromRealSolarPanelToConstantSolarPanel() {
-        val startDateTime = Date(0L)
-        val oneHourInMilliseconds = MILLISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * MINUTES_IN_AN_HOUR
-        val endDateTime = Date(oneHourInMilliseconds)
-
         val hourlyPowerGenerationRate = 2.0
         val constantSolarPanel = ConstantSolarPanel(startDateTime, hourlyPowerGenerationRate)
         val solarPanel = SolarPanel(startDateTime)
@@ -50,5 +47,28 @@ class TestHouse {
         house.setPowerGenerator(constantSolarPanel)
         powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
         assertEquals(powerGenerated, hourlyPowerGenerationRate)
+    }
+
+    @Test fun timeSeriesSolarPanelReadsFromFile() {
+        val fileWriter = FileWriter("testTimeSeries.csv")
+        fileWriter.append("hour,rate\n")
+        for (hour in 0..23) {
+            val rate = hour / 2.0
+            fileWriter.append("$hour,$rate\n")
+        }
+        fileWriter.flush()
+        fileWriter.close()
+
+        val timeSeriesSolarPanel = TimeSeriesInterpolatingSolarPanel(startDateTime, "testTimeSeries.csv")
+
+        val testFile = File("testTimeSeries.csv")
+        testFile.delete()
+
+        val house = House(timeSeriesSolarPanel)
+
+        endDateTime = startDateTime.plusHours(3L)
+        val powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
+        val expectedPower = 3 * 1.5 / 2.0
+        assertEquals(powerGenerated, expectedPower)
     }
 }

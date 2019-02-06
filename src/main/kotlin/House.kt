@@ -1,5 +1,6 @@
 import powergeneration.PowerGenerator
-import java.util.*
+
+import java.time.LocalDateTime
 
 class House(private var powerGenerator: PowerGenerator) {
 
@@ -7,7 +8,7 @@ class House(private var powerGenerator: PowerGenerator) {
         this.powerGenerator = powerGenerator
     }
 
-    fun getPowerGeneratedForDateTime(datetime: Date): Double {
+    fun getPowerGeneratedForDateTime(datetime: LocalDateTime): Double {
         return powerGenerator.powerGeneratedForDateTime(datetime)
     }
 }

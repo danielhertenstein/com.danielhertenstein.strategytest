@@ -1,13 +1,13 @@
 package powergeneration
 
-import java.util.*
+import java.time.LocalDateTime
 
 class ConstantSolarPanel(
-    previousDateTime: Date,
+    previousDateTime: LocalDateTime,
     private val hourlyPowerGenerationRate: Double
 ) : BasePowerGenerator(previousDateTime), PowerGenerator {
 
-    override fun powerGeneratedForDateTime(currentDateTime: Date): Double {
+    override fun powerGeneratedForDateTime(currentDateTime: LocalDateTime): Double {
         val hoursElapsed = timeDifferenceInHours(previousDateTime, currentDateTime)
         val powerGenerated = hoursElapsed * hourlyPowerGenerationRate
         previousDateTime = currentDateTime

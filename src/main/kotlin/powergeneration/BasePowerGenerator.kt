@@ -1,11 +1,10 @@
 package powergeneration
 
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
-abstract class BasePowerGenerator(protected var previousDateTime: Date) {
-    protected fun timeDifferenceInHours(startDateTime: Date, endDateTime: Date): Double {
-        val differenceInMilliseconds = endDateTime.time - startDateTime.time
-        return TimeUnit.HOURS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS).toDouble()
+abstract class BasePowerGenerator(protected var previousDateTime: LocalDateTime) {
+    protected fun timeDifferenceInHours(startDateTime: LocalDateTime, endDateTime: LocalDateTime): Double{
+        return startDateTime.until(endDateTime, ChronoUnit.HOURS).toDouble()
     }
 }
