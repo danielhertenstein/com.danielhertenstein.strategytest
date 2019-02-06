@@ -42,10 +42,19 @@ class TimeSeriesIntegratingSolarPanel (
     }
 
     override fun powerGeneratedForDateTime(currentDateTime: LocalDateTime): Double {
+        var powerGenerated = 0.0
+
         val hoursDifference = timeDifferenceInHours(previousDateTime, currentDateTime)
-        val startHour = previousDateTime.hour.toDouble()
-        val endHour = startHour + hoursDifference
-        val powerGenerated = integrator.integrate(10, powerGenerationFunction, startHour, endHour)
+        var startHour = previousDateTime.hour.toDouble()
+        var endHour = startHour + hoursDifference
+        while (endHour > 24) {
+            powerGenerated += integrator.integrate(10, powerGenerationFunction, startHour, 24.0)
+            val hoursForToday = 24.0 - startHour
+            endHour -= hoursForToday
+            startHour = 0.0
+        }
+        powerGenerated += integrator.integrate(10, powerGenerationFunction, startHour, endHour)
+
         previousDateTime = currentDateTime
         return powerGenerated
     }

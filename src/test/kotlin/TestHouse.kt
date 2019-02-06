@@ -25,6 +25,17 @@ class TestHouse {
         assertEquals(powerGenerated, hourlyPowerGenerationRate)
     }
 
+    @Test fun constantSolarPanelForOverADayHandledCorrectly() {
+        endDateTime = startDateTime.plusDays(1L).plusHours(1L)
+        val hourlyPowerGenerationRate = 2.0
+        val constantSolarPanel = ConstantSolarPanel(startDateTime, hourlyPowerGenerationRate)
+        val house = House(constantSolarPanel)
+
+        val powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
+        assertEquals(powerGenerated, hourlyPowerGenerationRate * 25)
+
+    }
+
     @Test fun houseWithRealSolarPanelReadsFromSensor() {
         val solarPanel = SolarPanel(startDateTime)
         val house = House(solarPanel)
@@ -55,6 +66,18 @@ class TestHouse {
         endDateTime = startDateTime.plusHours(3L)
         val powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
         val expectedPower = 3 * 1.5 / 2.0
+        assertEquals(powerGenerated, expectedPower)
+    }
+
+    @Test fun timeSeriesSolarPanelHandlesMultipleDayTimeGap() {
+        val timeSeriesFile = javaClass.getResource("testTimeSeries.csv").path
+        val timeSeriesSolarPanel = TimeSeriesIntegratingSolarPanel(startDateTime, timeSeriesFile)
+        val house = House(timeSeriesSolarPanel)
+
+        endDateTime = startDateTime.plusDays(3L).plusHours(1L)
+        val powerGenerated = house.getPowerGeneratedForDateTime(endDateTime)
+        val fullDayPower = 24.0 * 12.0 / 2.0
+        val expectedPower = 3 * fullDayPower + 1 * 0.5 / 2
         assertEquals(powerGenerated, expectedPower)
     }
 }
